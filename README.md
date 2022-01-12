@@ -1,6 +1,6 @@
 <h1 align="center">WNFT Contract</h1> <br>
 <p align="center">
-    <img alt="WNFT Contracts" title="WNFT Contract" src="https://i.imgur.com/53IA8bV.jpg" width="150">
+    <img alt="WNFT Contracts" title="WNFT Contract" src="https://raw.githubusercontent.com/Esteroids/WNFT-contract/master/docs/wnft-readme-logo,jpg" width="150">
 </p>
 
 <p align="center">
@@ -39,7 +39,7 @@ Find more information about WNFT in this [article](https://medium.com/p/7ec00099
 
 
 ## Setting Environment Variables
-You can set the environment variables in the`.env` file if you're unfamiliar with how environmentvariables work. Check out our [.env example](https://github.com/Esteroids/wnft/blob/main/.env.example). If you wish to use this method to set these variables, update the values in the .env.example file, and then rename it to '.env'
+You can set the environment variables in the`.env` file if you're unfamiliar with how environmentvariables work. Check out our [.env example](https://github.com/Esteroids/WNFT-contract/blob/main/.env.example). If you wish to use this method to set these variables, update the values in the .env.example file, and then rename it to '.env'
 
 ![WARNING](https://via.placeholder.com/15/f03c15/000000?text=+) **WARNING** ![WARNING](https://via.placeholder.com/15/f03c15/000000?text=+)
 
@@ -62,7 +62,7 @@ npm install
 
 ## Deploy
 
-The deployment script is in the [deploy](https://github.com/Esteroids/wnft/tree/main/scripts/deploy.js) directory. If required, edit the desired environment specific variables or constructor parameters in the script.
+The deployment script is in the [deploy](https://github.com/Esteroids/WNFT-contract/blob/main/scripts/deploy.js) directory. If required, edit the desired environment specific variables or constructor parameters in the script.
 
 This will deploy to a local hardhat network
 ```bash
