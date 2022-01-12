@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 
 import "./IMinting.sol";
 
-import "hardhat/console.sol";
 
 contract Minting is IMinting {
     function canMint(address to, uint256 tokenId) external view override returns (bool){

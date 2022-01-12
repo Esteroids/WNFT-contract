@@ -17,62 +17,24 @@ import "./onchainData/IonchainTokensData.sol";
 * @dev WNFT basic implementation
 */
 contract WNFT is Ownable, ERC721URIStorage {
-    Resolver private _ensResolver;
-    ENS private _ens;
-
-    AggregatorV3Interface private _priceFeed;
-
-    int256 public _wnftPriceInUSDPOW8 = 50*(10**8);
-
-    // for iterating all tokens
-    uint[] private keys;
-    uint public amount;
 
     struct SC {
         address SCaddress;
         bytes4 SCinterface;
     }
 
-    // check if the onchain field interface equals a given interface.
-    // If not it implies that either token field is undefined or the interface of the field
-    // doesn't equal the interface of the function being called.
-    modifier tokenOnchainFieldAllowed(string memory field, bytes4 SCinterface) {
-        require(_tokensMetadataFields[field].SCinterface ==  SCinterface, "WNFT: Token metadata field doent not exists or interface doesn't equal the function being used");
-        _;
-    }
+    Resolver private _ensResolver;
+    ENS private _ens;
 
-    // check if the onchain field is defined for the WNFT collection
-    // checks that owner of contract allows and defined the field
-    modifier collectionOnchainFieldAllowed(string memory field) {
-        require(_collectionMetadataFields[field] != true, "WNFT: Collection metadata field doent not exists");
-        _;
-    }
+    AggregatorV3Interface private _priceFeed;
 
-    // if minting is allowed for specific token
-    modifier canMintMod(address to, uint256 tokenId) {
-        require (_mintingContract.canMint(to, tokenId) == true, "WNFT: Minting not allowed");
-        _;
-    }
+    uint256 public wnftPriceInUSDPOW8 = 50*(10**8);
 
-    // if minting is allowed for specific token
-    modifier onlyTokenOwner(uint256 tokenId) {
-        address spender = msg.sender;
-        require(super._isApprovedOrOwner(spender, tokenId), "WNFT: Token owner only");
-        _;
-    }
+    // for iterating all tokens
+    uint[] private _keys;
+    uint public amount;
 
-    // emitted when WNFT contract owners add a new field of metadata for tokens
-    // when new field is allowed and defined for all tokens 
-    event TokenOnchainMetadataFieldAdded(string field, SC fieldSc);
-
-    // emitted when WNFT contract owners add a new field of onchain metadata field for the WNFT collection
-    // when new field of meta data allowed/defined for the collection
-    event CollectionOnchainMetadataFieldAdded(string field);
-
-    // emitted when owner switches from this contract to another
-    event ContractSwitch(address newContract);
-
-    // address(0) if this contract is still maintained, otherwise it means the owners recommend user to switch
+        // address(0) if this contract is still maintained, otherwise it means the owners recommend user to switch
     // to a new contract
     address private _contractSwitched;
 
@@ -100,8 +62,56 @@ contract WNFT is Ownable, ERC721URIStorage {
     // offchain per collection info
     string private _wnftUri;
 
-    // metadata of the whole WNFT collection
+    
 
+
+
+    // emitted when WNFT contract owners add a new field of metadata for tokens
+    // when new field is allowed and defined for all tokens 
+    event TokenOnchainMetadataFieldAdded(string field, SC fieldSc);
+
+    // emitted when WNFT contract owners add a new field of onchain metadata field for the WNFT collection
+    // when new field of meta data allowed/defined for the collection
+    event CollectionOnchainMetadataFieldAdded(string field);
+
+    // emitted when owner switches from this contract to another
+    event ContractSwitch(address newContract);
+
+
+
+        // check if the onchain field interface equals a given interface.
+    // If not it implies that either token field is undefined or the interface of the field
+    // doesn't equal the interface of the function being called.
+    modifier tokenOnchainFieldAllowed(string memory field, bytes4 SCinterface) {
+        require(_tokensMetadataFields[field].SCinterface ==  SCinterface, "WNFT: Token metadata error");
+        _;
+    }
+
+    // check if the onchain field is defined for the WNFT collection
+    // checks that owner of contract allows and defined the field
+    modifier collectionOnchainFieldAllowed(string memory field) {
+        require(_collectionMetadataFields[field] != true, "WNFT: Collection metadata error");
+        _;
+    }
+
+    // if minting is allowed for specific token
+    modifier canMintMod(address to, uint256 tokenId) {
+        require (_mintingContract.canMint(to, tokenId), "WNFT: Not allowed");
+        _;
+    }
+
+    // if minting is allowed for specific token
+    modifier onlyTokenOwner(uint256 tokenId) {
+        require(super._isApprovedOrOwner(msg.sender, tokenId), "WNFT: Owner only");
+        _;
+    }
+
+    modifier enoughFunds(uint value) {
+        require( value - (wnftPriceInUSDPOW8 * 10**18/uint(_getLatestPrice())) < 10, "Wei dont match");
+        _;
+    }
+
+    // metadata of the whole WNFT collection
 
     /*
      * @dev Constructor function
@@ -109,7 +119,6 @@ contract WNFT is Ownable, ERC721URIStorage {
     constructor (string memory name, string memory symbol, IMinting newMintingContract, Resolver newEnsResolver, ENS ens, bytes32 newEnsNode, AggregatorV3Interface newPriceFeed) ERC721(name, symbol) Ownable() {
 
         _mintingContract = newMintingContract;
-        // _contractSwitched = address(0);
         _ensResolver = newEnsResolver;
         _ens = ens;
         _ensNode = newEnsNode;
@@ -129,16 +138,6 @@ contract WNFT is Ownable, ERC721URIStorage {
         super._setTokenURI(tokenId, uri);
     }
 
-
-    /*
-     * @dev Returns the URI of the WNFT collection
-     * @return {string} WNFT uri for offchain meta data
-     * May return an empty string.
-     */
-    function wnftUri() external view returns (string memory) { 
-        return _wnftUri;
-    }
-
     /*
      * @dev Sets the URI for the WNFT collection
      * @param uri string URI to assign
@@ -147,8 +146,7 @@ contract WNFT is Ownable, ERC721URIStorage {
         _wnftUri = uri;
     }
 
-
-    /*
+     /*
      * @dev Function to add more onchain metadata fields for the tokens
      * the field_rules_sc points to a smart contract with Interface valid_data(tokenID, value) function
      * WNFT contract owners first add fields (name, weight etc.), with a connection to a smart contract that 
@@ -166,7 +164,7 @@ contract WNFT is Ownable, ERC721URIStorage {
 
         // verify interface of the smart contract
         //IERC165 _SCaddress = IERC165(SCaddress);
-        require(IERC165(SCaddress).supportsInterface(SCinterface), "SCAddress doesnt support SCInterface");
+        require(IERC165(SCaddress).supportsInterface(SCinterface), "SCInterface not supported");
 
         // set _tokensMetadataFields of the field   
         _tokensMetadataFields[fieldName].SCinterface = SCinterface;
@@ -175,7 +173,7 @@ contract WNFT is Ownable, ERC721URIStorage {
         emit TokenOnchainMetadataFieldAdded(fieldName, _tokensMetadataFields[fieldName]);
     }
 
-    // four functions to set token onchain metadata
+     // four functions to set token onchain metadata
     function setTokenOnchainMetadataString(uint256 tokenId, string calldata field, string calldata value) external tokenOnchainFieldAllowed(field, 0x661f2816) onlyTokenOwner(tokenId) {
 
         IonchainTokenDataString(_tokensMetadataFields[field].SCaddress).setData(tokenId, value);
@@ -186,18 +184,7 @@ contract WNFT is Ownable, ERC721URIStorage {
         IonchainTokenDataUint(_tokensMetadataFields[field].SCaddress).setData(tokenId, value);
     }
 
-    function tokenOnchainMetadataString(uint256 tokenId, string memory field) external view tokenOnchainFieldAllowed(field, 0x01ffc9a6) returns (string memory) {
-
-        return IonchainTokenDataString(_tokensMetadataFields[field].SCaddress).getData(tokenId);
-    }
-
-    function tokenOnchainMetadataUint(uint256 tokenId, string memory field) external view tokenOnchainFieldAllowed(field, 0x01ffc9a7) returns (uint) {
-        IonchainTokenDataUint SCInstance = IonchainTokenDataUint(_tokensMetadataFields[field].SCaddress);
-
-        return SCInstance.getData(tokenId);
-    }
-
-    /*
+     /*
      * @dev Function to add fields for collection onchain metadata
      * @param @fieldName The address that will receive the minted tokens.
      * will also emit event of CollectionOnchainMetadataFieldAdded with field name
@@ -212,27 +199,11 @@ contract WNFT is Ownable, ERC721URIStorage {
      * @param @fieldName The field name to set
      * @param @fieldValue The field value to set
      */
-    function setCollectionOnchainMetadata(string calldata fieldName, string calldata fieldValue) external collectionOnchainFieldAllowed(fieldName) onlyOwner {        
+    function setCollectionOnchainMetadata(string calldata fieldName, string calldata fieldValue) external collectionOnchainFieldAllowed(fieldName)  onlyOwner {  
+        //vCollectionOnchainFieldAllowed(fieldName);
         _collectionOnchainMetadata[fieldName] = fieldValue;
     }
 
-    /*
-     * @dev Function to get the collectionOnchainMetadata for specific field
-     * @param @fieldName The field name to get data for
-     * @return {string} Value of the collection onchain metadata for specific field
-     */
-    function collectionOnchainMetadata(string memory fieldName) external view collectionOnchainFieldAllowed(fieldName) returns (string memory) {
-        return _collectionOnchainMetadata[fieldName];
-    }
-
-    /*
-     * @dev Function to get the minting contract
-     * @return {IMinting} The minting contract
-     */
-    function mintingContract() external view returns (IMinting) {
-         return _mintingContract;
-    }
-   
     /*
      * @dev Function to set a minting contract
      * @param @newContract The new min
@@ -252,14 +223,6 @@ contract WNFT is Ownable, ERC721URIStorage {
     }
 
     /*
-     * @dev get the contract switched flag
-     * @return {address} The contract switch address
-     */
-    function contractSwitched() external view returns (address) {
-        return _contractSwitched;
-    }
-
-    /*
      * @dev Function to set ens content hash
      * @param @hash new content hash for ens
      */
@@ -267,16 +230,7 @@ contract WNFT is Ownable, ERC721URIStorage {
         _ensResolver.setContenthash(_ensNode, hash);
     }
 
-    /*
-     * @dev Function to get ens resolver
-     * @return {Resolver} the current resolver defined
-     */
-    function ENSResolver() external view returns (Resolver) {
-        return _ensResolver; 
-    }
-
-
-    /*
+        /*
      * @dev Function to set the ens resolver
      * @param @ensResolver ens resolver to set in the contract
      */
@@ -302,34 +256,11 @@ contract WNFT is Ownable, ERC721URIStorage {
     }
 
     /*
-    * @dev Function will return the ens node id
-    * @return {bytes32} ens node id returned
-    */
-    function ENSNode() external view returns (bytes32) {
-        return _ensNode;
-    }
-
-
-    /*
-     * @dev function to do internal minting
-     * @notice function is not checking balance or other things
-     * @param @to who to mint for
-     * @param @tokenId tokenId
-     */
-    function _doMint(address to, uint256 tokenId) internal {
-        _mint(to, tokenId);
-        // add to tokens index
-        keys.push(tokenId);
-        amount =  amount + 1;
-    }
-
-
-    /*
     * @dev Function to set the minting token price
     * @param @tokenPrice The USD value of the token price for minting
     */
-    function setTokenPrice(int256 tokenPrice) external onlyOwner {
-        _wnftPriceInUSDPOW8 = tokenPrice*(10**8);
+    function setTokenPrice(uint256 tokenPrice) external onlyOwner {
+        wnftPriceInUSDPOW8 = tokenPrice*(10**8);
     }
 
     /*
@@ -337,12 +268,85 @@ contract WNFT is Ownable, ERC721URIStorage {
     * @param @to The address that will receive the minted tokens.
     * @param @tokenId The token id to mint.
     */
-    function mint(address to, uint256 tokenId) external payable canMintMod(to, tokenId)  {
-
-        require(msg.value>0 && (int(msg.value) - (_wnftPriceInUSDPOW8 * 10**18/getLatestPrice()) < 10), "Wei dont match");
+    function mint(address to, uint256 tokenId) external payable enoughFunds(msg.value) canMintMod(to, tokenId)  {
         _doMint(to, tokenId);
-       
     }
+
+    /*
+     * @dev Function to mint tokens and set their URI in one action
+     * @param @to The address that will receive the minted tokens.
+     * @param @tokenId The token id to mint.
+     * @param @uri string URI to assign
+     */
+    function mintWithTokenURI(address to, uint256 tokenId, string calldata uri) external payable enoughFunds(msg.value) canMintMod(to, tokenId) {
+        
+       _doMint(to, tokenId);
+        // set token URI
+        super._setTokenURI(tokenId, uri);
+    }
+
+    /*
+     * @dev Returns the URI of the WNFT collection
+     * @return {string} WNFT uri for offchain meta data
+     * May return an empty string.
+     */
+    function wnftUri() external view returns (string memory) { 
+        return _wnftUri;
+    }
+   
+
+    function tokenOnchainMetadataString(uint256 tokenId, string memory field) external view tokenOnchainFieldAllowed(field, 0x01ffc9a6) returns (string memory) {
+
+        return IonchainTokenDataString(_tokensMetadataFields[field].SCaddress).getData(tokenId);
+    }
+
+    function tokenOnchainMetadataUint(uint256 tokenId, string memory field) external view tokenOnchainFieldAllowed(field, 0x01ffc9a7) returns (uint) {
+        return IonchainTokenDataUint(_tokensMetadataFields[field].SCaddress).getData(tokenId);
+    }
+
+    /*
+     * @dev Function to get the collectionOnchainMetadata for specific field
+     * @param @fieldName The field name to get data for
+     * @return {string} Value of the collection onchain metadata for specific field
+     */
+    function collectionOnchainMetadata(string memory fieldName) external view  returns (string memory) {
+        return _collectionOnchainMetadata[fieldName];
+    }
+
+    /*
+     * @dev Function to get the minting contract
+     * @return {IMinting} The minting contract
+     */
+    function mintingContract() external view returns (IMinting) {
+         return _mintingContract;
+    }
+   
+   
+    /*
+     * @dev get the contract switched flag
+     * @return {address} The contract switch address
+     */
+    function contractSwitched() external view returns (address) {
+        return _contractSwitched;
+    }
+
+    /*
+     * @dev Function to get ens resolver
+     * @return {Resolver} the current resolver defined
+     */
+    function ENSResolver() external view returns (Resolver) {
+        return _ensResolver; 
+    }
+
+    /*
+    * @dev Function will return the ens node id
+    * @return {bytes32} ens node id returned
+    */
+    function ENSNode() external view returns (bytes32) {
+        return _ensNode;
+    }
+
+    
 
      /*
      * @dev Function to check minting a token
@@ -353,26 +357,10 @@ contract WNFT is Ownable, ERC721URIStorage {
     function canMint(address to, uint256 tokenId) external view  returns (bool) {
         
         // check if taken
-        if (super._exists(tokenId) == true){
-            return false;
-        }else{
-            return _mintingContract.canMint(to, tokenId);
-        }
-
+        return ((!super._exists(tokenId)) && _mintingContract.canMint(to, tokenId));
+       
     }
 
-    /*
-     * @dev Function to mint tokens and set their URI in one action
-     * @param @to The address that will receive the minted tokens.
-     * @param @tokenId The token id to mint.
-     * @param @uri string URI to assign
-     */
-    function mintWithTokenURI(address to, uint256 tokenId, string calldata uri) external payable canMintMod(to, tokenId) {
-        require(msg.value>0 && (int(msg.value) - (_wnftPriceInUSDPOW8 * 10**18/getLatestPrice()) < 10), "Wei dont match");
-       _doMint(to, tokenId);
-        // set token URI
-        super._setTokenURI(tokenId, uri);
-    }
 
      /*
      * @dev Function to get token by incremental counter index
@@ -381,15 +369,27 @@ contract WNFT is Ownable, ERC721URIStorage {
      */
     function NthToken(uint i) external view returns (uint) {
         require(i < amount, "Token doesn't exist");
+        return _keys[i];
+    }
 
-        return keys[i];
+    /*
+     * @dev function to do internal minting
+     * @notice function is not checking balance or other things
+     * @param @to who to mint for
+     * @param @tokenId tokenId
+     */
+    function _doMint(address to, uint256 tokenId) internal {
+        _mint(to, tokenId);
+        // add to tokens index
+        _keys.push(tokenId);
+        amount =  amount + 1;
     }
 
     /*
      * @dev Function to get token by incremental counter index
      * @return {int} latest ETH/USD price from oracle
      */
-    function getLatestPrice() public view returns (int) {
+    function _getLatestPrice() internal view returns (int) {
         (
             uint80 roundID,
             int price,
@@ -400,5 +400,7 @@ contract WNFT is Ownable, ERC721URIStorage {
         // for ETH / USD price is scaled up by 10 ** 8
         return price;
     }
+
+    
 
 }
