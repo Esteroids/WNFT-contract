@@ -1,6 +1,6 @@
 <h1 align="center">WNFT Contract</h1> <br>
 <p align="center">
-    <img alt="WNFT Contracts" title="WNFT Contract" src="https://raw.githubusercontent.com/Esteroids/WNFT-contract/master/docs/wnft-readme-logo,jpg" width="150">
+    <img alt="WNFT Contracts" title="WNFT Contract" src="https://raw.githubusercontent.com/Esteroids/WNFT-contract/master/docs/wnft-readme-logo.jpg" width="150">
 </p>
 
 <p align="center">
