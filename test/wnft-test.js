@@ -247,7 +247,7 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
       console.log("initialTokenURI", initialTokenURI)
 
       await expect(wnftContract.connect(testNotTokenOwner).setTokenURI(testTokenId, testTokenURI)).to.be.revertedWith(
-        "WNFT: Token owner only",
+        "WNFT: Owner only",
       )
 
       expect(await wnftContract.tokenURI(testTokenId)).to.be.equal(initialTokenURI)
@@ -268,12 +268,6 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
       await expect(wnftContract.tokenURI(testNoneExistingTokenId)).to.be.revertedWith(
         "ERC721URIStorage: URI query for nonexistent token",
       )
-    })
-  })
-
-  describe("Price Oracle", async function () {
-    it("Should be able to get price from oracle", async function () {
-      expect(await wnftContract.getLatestPrice()).to.be.equal(price)
     })
   })
 

@@ -4,6 +4,7 @@
 
 require("@nomiclabs/hardhat-ethers")
 require("@nomiclabs/hardhat-waffle")
+require("@nomiclabs/hardhat-etherscan")
 require("ethereum-waffle")
 require("hardhat-contract-sizer")
 
@@ -51,6 +52,7 @@ const KOVAN_RPC_URL =
   process.env.KOVAN_RPC_URL ||
   (process.env.ALCHEMY_KOVAN_API_KEY && `https://eth-kovan.alchemyapi.io/v2/${process.env.ALCHEMY_KOVAN_API_KEY}`) ||
   ""
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || ""
 
 module.exports = {
   defaultNetwork: "hardhat",
@@ -95,4 +97,7 @@ module.exports = {
   artifacts: "./artifacts",
   cache: "./cache",
   contractSizer: {},
+  etherscan: {
+    apiKey: ETHERSCAN_API_KEY,
+  },
 }

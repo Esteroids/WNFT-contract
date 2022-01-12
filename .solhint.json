@@ -2,6 +2,10 @@
     "extends": "solhint:recommended",
     "rules": {
       "compiler-version": ["error", "^0.8.0", "0.6.6"],
-      "func-visibility": ["warn", { "ignoreConstructors": true }]
+      "func-visibility": ["warn", { "ignoreConstructors": true }],
+      "constructor-syntax": "warn",
+      "ordering": "warn",
+      "private-vars-leading-underscore": ["warn",{"strict":false}],
+      "code-complexity": ["warn",7]
     }
   }
