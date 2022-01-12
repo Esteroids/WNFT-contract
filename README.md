@@ -35,8 +35,7 @@ Find more information about WNFT in this [article](https://medium.com/p/7ec00099
 
 ## Requirements
 
-- [NPM](https://www.npmjs.com/)
-- [Hardhat](https://hardhat.org/)
+- [NPM](https://www.npmjs.com/) >=8.5.0
 
 
 ## Setting Environment Variables
