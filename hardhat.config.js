@@ -5,30 +5,15 @@
 require("@nomiclabs/hardhat-ethers")
 require("@nomiclabs/hardhat-waffle")
 require("@nomiclabs/hardhat-etherscan")
+require("hardhat-deploy")
 require("ethereum-waffle")
 require("hardhat-contract-sizer")
 
-const fs = require("fs")
 const dotenv = require("dotenv")
+const { loadEnvLocal } = require("./helper-hardhat-config")
 
-const result = dotenv.config()
-
-if (result.error) {
-  throw result.error
-}
-
-try {
-  const localEnv = ".env.local"
-  if (fs.existsSync(localEnv)) {
-    // file exists
-    const envConfig = dotenv.parse(fs.readFileSync(localEnv))
-    for (const k in envConfig) {
-      process.env[k] = envConfig[k]
-    }
-  }
-} catch (err) {
-  console.error(err)
-}
+dotenv.config()
+loadEnvLocal()
 
 // Go to https://www.alchemyapi.io, sign up, create
 // a new App in its dashboard, and replace "KEY" with its key
@@ -67,14 +52,24 @@ module.exports = {
     rinkeby: {
       url: RINKEBY_RPC_URL,
       accounts: [PRIVATE_KEY],
+      saveDeployments: true,
     },
     goerli: {
       url: GOERLI_RPC_URL,
       accounts: [PRIVATE_KEY],
+      saveDeployments: true,
     },
     kovan: {
       url: KOVAN_RPC_URL,
       accounts: [PRIVATE_KEY],
+      saveDeployments: true,
+    },
+  },
+  // hardhat-deploy
+  namedAccounts: {
+    deployer: {
+      default: 0, // here this will by default take the first account as deployer
+      1: 0, // similarly on mainnet it will take the first account as deployer. Note though that depending on how hardhat network are configured, the account 0 on one network can be different than on another
     },
   },
   solidity: {
@@ -97,6 +92,7 @@ module.exports = {
   artifacts: "./artifacts",
   cache: "./cache",
   contractSizer: {},
+  // hardhat-etherscan
   etherscan: {
     apiKey: ETHERSCAN_API_KEY,
   },

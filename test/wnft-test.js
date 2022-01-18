@@ -2,12 +2,6 @@ const { expect } = require("chai")
 const { ethers, network } = require("hardhat")
 const skipIf = require("mocha-skip-if")
 
-const result = require("dotenv").config()
-
-if (result.error) {
-  throw result.error
-}
-
 const { TestUtils } = require("../test-utils/test-utils")
 const { developmentChains } = require("../helper-hardhat-config")
 
