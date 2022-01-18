@@ -1,9 +1,16 @@
+const fs = require("fs")
+const dotenv = require("dotenv")
+
 const networkConfig = {
   default: {
     name: "hardhat",
+    ensRegistry: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+    ensPublicResolver: "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
   },
   31337: {
     name: "localhost",
+    ensRegistry: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+    ensPublicResolver: "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
   },
   42: {
     name: "kovan",
@@ -17,6 +24,8 @@ const networkConfig = {
   },
   1: {
     name: "mainnet",
+    ensRegistry: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+    ensPublicResolver: "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
   },
   5: {
     name: "goerli",
@@ -44,8 +53,24 @@ const getNetworkIdFromName = async (networkIdName) => {
   return null
 }
 
+const loadEnvLocal = () => {
+  try {
+    const localEnv = ".env.local"
+    if (fs.existsSync(localEnv)) {
+      // file exists
+      const envConfig = dotenv.parse(fs.readFileSync(localEnv))
+      for (const k in envConfig) {
+        process.env[k] = envConfig[k]
+      }
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 module.exports = {
   networkConfig,
   getNetworkIdFromName,
   developmentChains,
+  loadEnvLocal,
 }

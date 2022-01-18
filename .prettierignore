@@ -2,4 +2,7 @@
 node_modules
 artifacts
 cache
+deployments
+deployments/*
 artifacts/*
+
