@@ -66,7 +66,7 @@ The deployment script is in the [deploy](https://github.com/Esteroids/WNFT-contr
 
 This will deploy to a local hardhat network
 ```bash
-npx hardhat run scripts/deploy.js
+npx hardhat deploy
 ```
 
 To deploy to localhost:
@@ -77,12 +77,12 @@ npx hardhat node
 ```
 2. Open a new terminal and deploy the smart contract in the localhost network
 ```bash
-npx hardhat run --network localhost scripts/deploy.js
+npx hardhat --network localhost deploy
 ```
 
 To deploy to a network:
 ```bash
-npx hardhat run --network <your-network> scripts/deploy.js
+npx hardhat --network <your-network> deploy
 ```
 
 ## Test
