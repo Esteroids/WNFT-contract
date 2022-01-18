@@ -1,7 +1,7 @@
 const { networkConfig } = require("../helper-hardhat-config")
 const { ethers } = require("hardhat")
 
-module.exports = async ({ getNamedAccounts, deployments, getChainId, hre }) => {
+module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const DECIMALS = 8
   const INITIAL_PRICE = ethers.BigNumber.from(140330173736)
 
