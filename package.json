@@ -53,8 +53,6 @@
     "eslint": "^7.32.0",
     "mocha-skip-if": "^0.0.3"
   },
-  "publishConfig": {
-    "cache": "~/.npm",
-    "registry": "https://npm.pkg.github.com"
-  }
+  "registry": "https://npm.pkg.github.com"
+  
 }
