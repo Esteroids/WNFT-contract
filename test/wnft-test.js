@@ -1,6 +1,7 @@
 const { expect } = require("chai")
-const { ethers, network } = require("hardhat")
+const { ethers, network, waffle } = require("hardhat")
 const skipIf = require("mocha-skip-if")
+const { deployMockContract } = waffle
 
 const { TestUtils } = require("../test-utils/test-utils")
 const { developmentChains } = require("../helper-hardhat-config")
@@ -12,15 +13,12 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   const WNFTName = "Citadel"
   const WNFTSymbol = "CIT"
 
-  const provider = new ethers.providers.AlchemyProvider("goerli", process.env.ALCHEMY_GOERLI_API_KEY)
-  const ensRegistryContract = new ethers.Contract("0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e", ENSRegistry.abi, provider)
+
+  let publicResolverContract
+  let ensRegistryContract
 
   const ensNodeId = "0x18b7e70c27aa3a4fd844e78c153b49a03233f5588351c1fc26cff3486469b379"
-  const publicResolverContract = new ethers.Contract(
-    "0x4B1488B7a6B320d2D721406204aBc3eeAa9AD329",
-    PublicResolver.abi,
-    provider,
-  )
+
 
   const price = ethers.BigNumber.from(140330173736)
   const priceInETH = (50 * 10 ** 8) / price
@@ -39,10 +37,15 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   let mockPriceFeed
 
   before(async function () {
+
+
     // runs once before the first test in this block
     Minting = await ethers.getContractFactory("Minting")
     mintingContract = await Minting.deploy()
     await mintingContract.deployed()
+    ;[owner, addr1, addr2] = await ethers.getSigners()
+    publicResolverContract = await deployMockContract(owner, PublicResolver.abi)
+    ensRegistryContract = await deployMockContract(owner, ENSRegistry.abi)
 
     onchainTokenDataString = await ethers.getContractFactory("onchainTokenDataString")
 
@@ -52,7 +55,7 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   })
 
   beforeEach(async function () {
-    ;[owner, addr1, addr2] = await ethers.getSigners()
+    
 
     wnftContract = await WNFT.deploy(
       WNFTName,

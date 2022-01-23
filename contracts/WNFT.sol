@@ -64,8 +64,6 @@ contract WNFT is Ownable, ERC721URIStorage {
 
     
 
-
-
     // emitted when WNFT contract owners add a new field of metadata for tokens
     // when new field is allowed and defined for all tokens 
     event TokenOnchainMetadataFieldAdded(string field, SC fieldSc);
@@ -391,11 +389,10 @@ contract WNFT is Ownable, ERC721URIStorage {
      */
     function _getLatestPrice() internal view returns (int) {
         (
-            uint80 roundID,
+            ,
             int price,
-            uint startedAt,
-            uint timeStamp,
-            uint80 answeredInRound
+            ,
+            ,
         ) = _priceFeed.latestRoundData();
         // for ETH / USD price is scaled up by 10 ** 8
         return price;

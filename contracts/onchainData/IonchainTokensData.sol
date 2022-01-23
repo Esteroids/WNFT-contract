@@ -62,33 +62,3 @@ interface IonchainTokenDataUint is IERC165 {
      */
     function getData(uint256 tokenId) external view returns (uint);
 }
-
-// interface IonchainTokenDataInt is ERC165 {
-//     /**
-//      * @dev Checks if onchain metdata data is valid for a given token id 
-//      * @param  @tokenId uint256 tokenId     id of the token
-//      * @param  @value int  calldata      value of the metadata
-//      * @param  @data bytes[] memory         any extra data needed to make the decision
-//      * @return {bool}         true if metadata is valid, false otherwise
-//      */
-//     function validData(uint256 tokenId, int calldata value, bytes[] memory data) external view returns (bool);
-
-//     /// @notice Query if a contract implements an interface
-//     /// @param interfaceID The interface identifier, as specified in ERC-165
-//     /// @dev Interface identification is specified in ERC-165. This function
-//     ///  uses less than 30,000 gas.
-//     /// @return `true` if the contract implements `interfaceID` and
-//     ///  `interfaceID` is not 0xffffffff, `false` otherwise
-//     function supportsInterface(bytes4 interfaceID) external view returns (bool);
-// }
-
-// interface IonchainTokenDataBool is ERC165 {
-//     /**
-//      * @dev Checks if onchain metdata data is valid for a given token id 
-//      * @param  @tokenId uint256 tokenId     id of the token
-//      * @param  @value bool  calldata      value of the metadata
-//      * @param  @data bytes[] memory         any extra data needed to make the decision
-//      * @return {bool}         true if metadata is valid, false otherwise
-//      */
-//     function validData(uint256 tokenId, bool calldata value, bytes[] memory data) external view returns (bool);
-// }

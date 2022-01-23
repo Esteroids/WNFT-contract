@@ -24,8 +24,8 @@ contract onchainTokenDataSize is IonchainTokenDataUint {
     // 5 fish of fishes
     mapping(uint256 => uint) private size;
 
-    uint amountMeganieal;
-    WNFT _wnft;
+    uint private amountMeganieal;
+    WNFT private _wnft;
 
     constructor(WNFT wnft) {
         _wnft = wnft;
