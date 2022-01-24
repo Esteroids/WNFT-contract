@@ -30,7 +30,7 @@ contract MintingLimitedAmount is Ownable, IMinting {
      * @param  tokenId uint256 ID of the token
      * @return bool true if token can be minted. false otherwise.
      */
-    function canMint(address to, uint256 tokenId) public view override returns (bool){
+    function canMint(address, uint256) public view override returns (bool){
         require(_wnft.amount() < _maxAmount, "Minting: reached maximum amount.");
 
         return true;

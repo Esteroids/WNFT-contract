@@ -25,7 +25,7 @@ contract onchainTokenDataString is IonchainTokenDataString {
      * @param  @data bytes[] memory         any extra data needed to make the decision
      * @return {bool}         true if metadata is valid, false otherwise
      */
-    function validData(uint256 tokenId, string calldata value) public view override returns (bool) {
+    function validData(uint256, string calldata) public pure override returns (bool) {
         return true;
     }
 
@@ -35,7 +35,7 @@ contract onchainTokenDataString is IonchainTokenDataString {
      * @param  @value string  calldata      value of the metadata
      * @param  @data bytes[] memory         any extra data needed to make the decision
      */
-    function setData(uint256 tokenId, string calldata value) external override {
+    function setData(uint256, string calldata) external override {
         tokendata = "set";
     }
 
@@ -44,7 +44,7 @@ contract onchainTokenDataString is IonchainTokenDataString {
      * @param  @tokenId uint256 tokenId     id of the token
      * @return {string}                     returns the metadata if it exists
      */
-    function getData(uint256 tokenId) external view override returns (string memory) {
+    function getData(uint256) external pure override returns (string memory) {
         return "";
     }
 
@@ -73,7 +73,7 @@ contract onchainTokenDataUint is IonchainTokenDataUint {
      * @param  @data bytes[] memory         any extra data needed to make the decision
      * @return {bool}         true if metadata is valid, false otherwise
      */
-    function validData(uint256 tokenId, uint value) public view override returns (bool) {
+    function validData(uint256, uint) public pure override returns (bool) {
         return true;
     }
 
@@ -84,7 +84,7 @@ contract onchainTokenDataUint is IonchainTokenDataUint {
      * @param  @data bytes[] memory         any extra data needed to make the decision
      * @return {bool}         true if metadata is valid, false otherwise
      */
-    function setData(uint256 tokenId, uint value) external override {
+    function setData(uint256, uint) external override {
         tokendata = 1;
     }
 
@@ -92,7 +92,7 @@ contract onchainTokenDataUint is IonchainTokenDataUint {
      * @dev gets onchain data for a given token id 
      * @return {uint}         returns the metadata if it exists
      */
-    function getData(uint256 tokenId) external view override returns (uint) {
+    function getData(uint256) external pure override returns (uint) {
         return 0;
     }
 

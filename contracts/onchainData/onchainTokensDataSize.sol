@@ -42,7 +42,7 @@ contract onchainTokenDataSize is IonchainTokenDataUint {
      * @param  @data bytes[] memory         bytes[0] is amount of tokens existing
      * @return {bool}         true if metadata is valid, false otherwise
      */
-    function validData(uint256 tokenId, uint value) public view override returns (bool) {
+    function validData(uint256, uint value) public view override returns (bool) {
         // we only allow value = 0(nofish), 2 (fish-fish) or 3 (meganieal) sizes now
         // meganieal is allowed to be maximum 20% of fishes
         // TODO: check token exists
