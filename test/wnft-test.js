@@ -13,12 +13,10 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   const WNFTName = "Citadel"
   const WNFTSymbol = "CIT"
 
-
   let publicResolverContract
   let ensRegistryContract
 
   const ensNodeId = "0x18b7e70c27aa3a4fd844e78c153b49a03233f5588351c1fc26cff3486469b379"
-
 
   const price = ethers.BigNumber.from(140330173736)
   const priceInETH = (50 * 10 ** 8) / price
@@ -37,8 +35,6 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   let mockPriceFeed
 
   before(async function () {
-
-
     // runs once before the first test in this block
     Minting = await ethers.getContractFactory("Minting")
     mintingContract = await Minting.deploy()
@@ -55,8 +51,6 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   })
 
   beforeEach(async function () {
-    
-
     wnftContract = await WNFT.deploy(
       WNFTName,
       WNFTSymbol,

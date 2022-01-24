@@ -9,34 +9,8 @@ require("hardhat-deploy")
 require("ethereum-waffle")
 require("hardhat-contract-sizer")
 
-const dotenv = require("dotenv")
-const { loadEnvLocal } = require("./helper-hardhat-config")
+const { getRpcUrl, getAccounts } = require("./utils/networks")
 
-dotenv.config()
-loadEnvLocal()
-
-// Go to https://www.alchemyapi.io, sign up, create
-// a new App in its dashboard, and replace "KEY" with its key
-
-// Replace this private key with your Ropsten account private key
-// To export your private key from Metamask, open Metamask and
-// go to Account Details > Export Private Key
-// Be aware of NEVER putting real Ether into testing accounts
-
-const PRIVATE_KEY = process.env.PRIVATE_KEY
-
-const RINKEBY_RPC_URL =
-  process.env.RINKEBY_RPC_URL ||
-  (process.env.ALCHEMY_RINKEBY_API_KEY && `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_RINKEBY_API_KEY}`) ||
-  ""
-const GOERLI_RPC_URL =
-  process.env.GOERLI_RPC_URL ||
-  (process.env.ALCHEMY_GOERLI_API_KEY && `https://eth-goerli.alchemyapi.io/v2/${process.env.ALCHEMY_GOERLI_API_KEY}`) ||
-  ""
-const KOVAN_RPC_URL =
-  process.env.KOVAN_RPC_URL ||
-  (process.env.ALCHEMY_KOVAN_API_KEY && `https://eth-kovan.alchemyapi.io/v2/${process.env.ALCHEMY_KOVAN_API_KEY}`) ||
-  ""
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || ""
 
 module.exports = {
@@ -50,18 +24,18 @@ module.exports = {
     },
     localhost: {},
     rinkeby: {
-      url: RINKEBY_RPC_URL,
-      accounts: [PRIVATE_KEY],
+      url: getRpcUrl("rinkeby"),
+      accounts: getAccounts("rinkeby"),
       saveDeployments: true,
     },
     goerli: {
-      url: GOERLI_RPC_URL,
-      accounts: [PRIVATE_KEY],
+      url: getRpcUrl("goerli"),
+      accounts: getAccounts("goerli"),
       saveDeployments: true,
     },
     kovan: {
-      url: KOVAN_RPC_URL,
-      accounts: [PRIVATE_KEY],
+      url: getRpcUrl("kovan"),
+      accounts: getAccounts("kovan"),
       saveDeployments: true,
     },
   },
