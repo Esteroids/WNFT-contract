@@ -12,13 +12,13 @@ import "../IMinting.sol";
  * The maximmum amount can be modified by contract owner 
  */
 contract MintingLimitedAmount is Ownable, IMinting {
-    WNFT public _wnft;
-    uint public _maxAmount;
+    WNFT public wnft;
+    uint public maxAmount;
 
     constructor() {
         // though uint default is currently 0, 
         // we set it explicitly to avoid breaking changes in future Solidity versions
-        _maxAmount = 0;
+        maxAmount = 0;
     }
 
     /*
@@ -30,8 +30,8 @@ contract MintingLimitedAmount is Ownable, IMinting {
      * @param  tokenId uint256 ID of the token
      * @return bool true if token can be minted. false otherwise.
      */
-    function canMint(address to, uint256 tokenId) public view override returns (bool){
-        require(_wnft.amount() < _maxAmount, "Minting: reached maximum amount.");
+    function canMint(address, uint256) public view override returns (bool){
+        require(wnft.amount() < maxAmount, "Minting: reached maximum amount.");
 
         return true;
     }
@@ -43,32 +43,17 @@ contract MintingLimitedAmount is Ownable, IMinting {
      * @param IncreaseAmount uint amount in which we increase the maximum
      */
     function increaseMaxAmount(uint increaseAmount) external onlyOwner {
-        _maxAmount += increaseAmount;
+        maxAmount += increaseAmount;
     }
 
-    /*
-     * Return the maximum allowed amount of tokens.
-     * @return uint maximum allowed amount of tokens.
-     * 
-     */
-    function maxAmount() external view returns (uint) {
-        return _maxAmount;
-    }
 
     /*
      * set the address of the WNFT contract
      * @param WNFT address of wnft contract
      */
     function setWNFT(WNFT newWnft) external onlyOwner {
-        _wnft = newWnft;
+        wnft = newWnft;
     }
 
-    /*
-     * Returns the address of the WNFT contract
-     * @return address addres of wnft contract.
-     */
-    function wnft() external view returns (WNFT) {
-        return _wnft;
-    }
 
 }

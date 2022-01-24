@@ -11,7 +11,7 @@ import "../WNFT.sol";
 
 contract onchainTokenDataSize is IonchainTokenDataUint {
     modifier onlyWNFTContract() { 
-        require(msg.sender == address(_wnft));
+        require(msg.sender == address(_wnft), "sender unknown");
         _;
     }
 
@@ -22,17 +22,17 @@ contract onchainTokenDataSize is IonchainTokenDataUint {
     // 3 meganieal the big fish
     // 4 happy giant fish
     // 5 fish of fishes
-    mapping(uint256 => uint) private size;
+    mapping(uint256 => uint) private _size;
 
-    uint amountMeganieal;
-    WNFT _wnft;
+    uint private _amountMeganieal;
+    WNFT private _wnft;
 
     constructor(WNFT wnft) {
         _wnft = wnft;
 
         // though uint default is currently 0, 
         // we set it explicitly to avoid breaking changes in future Solidity versions
-        amountMeganieal = 0;
+        _amountMeganieal = 0;
     }
 
     /**
@@ -42,7 +42,7 @@ contract onchainTokenDataSize is IonchainTokenDataUint {
      * @param  @data bytes[] memory         bytes[0] is amount of tokens existing
      * @return {bool}         true if metadata is valid, false otherwise
      */
-    function validData(uint256 tokenId, uint value) public view override returns (bool) {
+    function validData(uint256, uint value) public view override returns (bool) {
         // we only allow value = 0(nofish), 2 (fish-fish) or 3 (meganieal) sizes now
         // meganieal is allowed to be maximum 20% of fishes
         // TODO: check token exists
@@ -56,7 +56,7 @@ contract onchainTokenDataSize is IonchainTokenDataUint {
             resp = true;
         
         // 3 == big
-        if ((value == 3) && ((amount-1) % 5 <= amountMeganieal))
+        if ((value == 3) && ((amount-1) % 5 <= _amountMeganieal))
             resp = true;
 
         return resp;
@@ -73,12 +73,12 @@ contract onchainTokenDataSize is IonchainTokenDataUint {
         // remark: we assume that the tokenId is checked by 
         // the WNFT contract calling this function
 
-        require(validData(tokenId, value));
+        require(validData(tokenId, value), "invalid data");
 
         if (value == 3)
-            amountMeganieal++;
+            _amountMeganieal++;
         
-        size[tokenId] = value;
+        _size[tokenId] = value;
     }
 
     /*
@@ -86,7 +86,7 @@ contract onchainTokenDataSize is IonchainTokenDataUint {
      * @return {uint}         returns the metadata if it exists
      */
     function getData(uint256 tokenId) external view override returns (uint) {
-        return size[tokenId];
+        return _size[tokenId];
     }
 
      /*
@@ -96,7 +96,7 @@ contract onchainTokenDataSize is IonchainTokenDataUint {
         return interfaceId == type(IonchainTokenDataUint).interfaceId; 
     }
 
-    function WNFT() external view returns (WNFT) {
+    function getWNFT() external view returns (WNFT) {
         return _wnft;
     }
 

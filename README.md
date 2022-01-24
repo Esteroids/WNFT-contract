@@ -35,7 +35,7 @@ Find more information about WNFT in this [article](https://medium.com/p/7ec00099
 
 ## Requirements
 
-- [NPM](https://www.npmjs.com/) >=8.5.0
+- [Yarn](https://yarnpkg.com/)
 
 
 ## Setting Environment Variables
@@ -56,7 +56,7 @@ PRIVATE_KEY='abcdefg'
 Then you can install all the dependencies
 
 ```bash
-npm install
+yarn
 ```
 
 

@@ -6,7 +6,7 @@ import "./IMinting.sol";
 
 
 contract Minting is IMinting {
-    function canMint(address to, uint256 tokenId) external view override returns (bool){
+    function canMint(address, uint256) external pure override returns (bool){
         return true;
     }
 }
