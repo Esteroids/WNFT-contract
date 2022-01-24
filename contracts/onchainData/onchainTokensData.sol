@@ -11,8 +11,8 @@ import "../WNFT.sol";
  */
 
 contract onchainTokenDataString is IonchainTokenDataString {
-    string tokendata;
-    WNFT _wnft;
+    string private _tokendata;
+    WNFT private _wnft;
 
     constructor(WNFT wnft) {
         _wnft = wnft;
@@ -36,7 +36,7 @@ contract onchainTokenDataString is IonchainTokenDataString {
      * @param  @data bytes[] memory         any extra data needed to make the decision
      */
     function setData(uint256, string calldata) external override {
-        tokendata = "set";
+        _tokendata = "set";
     }
 
     /*
@@ -58,9 +58,9 @@ contract onchainTokenDataString is IonchainTokenDataString {
 }
 
 contract onchainTokenDataUint is IonchainTokenDataUint {
-    uint tokendata;
+    uint private _tokendata;
 
-    WNFT _wnft;
+    WNFT private _wnft;
 
     constructor(WNFT wnft) {
         _wnft = wnft;
@@ -85,7 +85,7 @@ contract onchainTokenDataUint is IonchainTokenDataUint {
      * @return {bool}         true if metadata is valid, false otherwise
      */
     function setData(uint256, uint) external override {
-        tokendata = 1;
+        _tokendata = 1;
     }
 
     /*
