@@ -96,7 +96,7 @@ contract onchainTokenDataSize is IonchainTokenDataUint {
         return interfaceId == type(IonchainTokenDataUint).interfaceId; 
     }
 
-    function WNFT() external view returns (WNFT) {
+    function getWNFT() external view returns (WNFT) {
         return _wnft;
     }
 
