@@ -13,9 +13,9 @@ const ContractsNotSame = async (contract1, contract2) => {
 }
 
 const TestUtils = {
-  ContractsNotSame: ContractsNotSame,
-  WNFTContractOwner: WNFTContractOwner,
-  notWNFTContractOwner: notWNFTContractOwner,
+  ContractsNotSame,
+  WNFTContractOwner,
+  notWNFTContractOwner,
 }
 
 module.exports = { TestUtils }

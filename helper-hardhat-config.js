@@ -1,6 +1,3 @@
-const fs = require("fs")
-const dotenv = require("dotenv")
-
 const networkConfig = {
   default: {
     name: "hardhat",
@@ -53,24 +50,8 @@ const getNetworkIdFromName = async (networkIdName) => {
   return null
 }
 
-const loadEnvLocal = () => {
-  try {
-    const localEnv = ".env.local"
-    if (fs.existsSync(localEnv)) {
-      // file exists
-      const envConfig = dotenv.parse(fs.readFileSync(localEnv))
-      for (const k in envConfig) {
-        process.env[k] = envConfig[k]
-      }
-    }
-  } catch (err) {
-    console.error(err)
-  }
-}
-
 module.exports = {
   networkConfig,
   getNetworkIdFromName,
   developmentChains,
-  loadEnvLocal,
 }
