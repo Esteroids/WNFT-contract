@@ -1,7 +1,7 @@
 const dotenv = require("dotenv")
 const result = dotenv.config()
 if (result.error) {
-  console.error('Couldnt load ".env" file makes sure its created and contains the necessary values')
+  console.error('Couldnt load ".env" file makes sure its created and contains the necessary values (see https://github.com/Esteroids/WNFT-contract#setting-environment-variables for details)')
   process.exit(1)
 }
 
