@@ -62,7 +62,7 @@ yarn
 
 ## Deploy
 
-The deployment script is in the [deploy](https://github.com/Esteroids/WNFT-contract/blob/main/scripts/deploy.js) directory. If required, edit the desired environment specific variables or constructor parameters in the script.
+The deployment script is in the [deploy](https://github.com/Esteroids/WNFT-contract/tree/main/deploy) directory. If required, edit the desired environment specific variables or constructor parameters in the script.
 
 This will deploy to a local hardhat network
 ```bash
