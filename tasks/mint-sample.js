@@ -9,7 +9,7 @@ task("MintSample", "Prints an account's balance").setAction(async (taskArgs, hre
     //const tokenOwner = hre.ethers.utils.getAddress("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
 
     const price = hre.ethers.BigNumber.from(140330173736)
-    const priceInETH = (50 * 10 ** 8) / price
+    const priceInETH = (1 * 10 ** 8) / price
     const priceInWie = hre.ethers.BigNumber.from((priceInETH * 10 ** 18).toString())
 
     const testTokenId = 1235

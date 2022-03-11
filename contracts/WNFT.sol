@@ -31,7 +31,7 @@ contract WNFT is Ownable, ERC721URIStorage {
 
     AggregatorV3Interface private _priceFeed;
 
-    uint256 public wnftPriceInUSDPOW8 = 50*(10**8);
+    uint256 public wnftPriceInUSDPOW8 = 1*(10**8);
 
     // for iterating all tokens
     uint[] private _keys;
