@@ -44,4 +44,4 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 }
 
-module.exports.tags = ["all", "wnft"]
+module.exports.tags = ["all", "wnft", "wnftRequired"]

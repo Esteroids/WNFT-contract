@@ -281,12 +281,36 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
     it("Set ENS node", async function () {
       const newEnsNodeId = "0x18b7e70c27aa3a4fd844e78c153b49a03233f5588351c1fc26cff3486469b378"
 
-      await wnftContract.setENSNode(newEnsNodeId)
+      await wnftContract.setENSNodeID(newEnsNodeId)
 
-      expect(await wnftContract.ENSNode()).to.be.equal(newEnsNodeId)
+      expect(await wnftContract.ENSNodeID()).to.be.equal(newEnsNodeId)
     })
   })
 
+
+  describe("Collection onchain metadata", async function () {
+    it("Add collection onchain metadata field", async function () {
+      const testFieldName ="my field 1"
+
+      const addCollectionOnchainMetadataFieldTx = await wnftContract.addCollectionOnchainMetadataField(testFieldName)
+      await addCollectionOnchainMetadataFieldTx.wait()
+
+    })
+
+    it("Set collection onchain metadata value", async function () {
+      const testFieldName ="my field 1"
+      const testFieldValue ="i am value"
+
+      const addCollectionOnchainMetadataFieldTx = await wnftContract.addCollectionOnchainMetadataField(testFieldName)
+      await addCollectionOnchainMetadataFieldTx.wait()
+
+      const setCollectionOnchainMetadataTx = await wnftContract.setCollectionOnchainMetadata(testFieldName, testFieldValue)
+      await setCollectionOnchainMetadataTx.wait()
+
+    })
+  })
+
+  
   describe("Token onchain metadata", async function () {
     beforeEach(async function () {
       onchainTokenDataStringContract = await onchainTokenDataString.deploy(wnftContract.address)

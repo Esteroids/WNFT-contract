@@ -41,6 +41,7 @@
     "hardhat-contract-sizer": "^2.3.1",
     "hardhat-deploy": "^0.9.24",
     "hardhat-deploy-ethers": "^0.3.0-beta.13",
+    "hardhat-gas-reporter": "^1.0.8",
     "mocha-skip-if": "^0.0.3",
     "prettier": "2.5.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
