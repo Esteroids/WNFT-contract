@@ -19,8 +19,8 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   const ensNodeId = "0x18b7e70c27aa3a4fd844e78c153b49a03233f5588351c1fc26cff3486469b379"
 
   const price = ethers.BigNumber.from(140330173736)
-  const priceInETH = (50 * 10 ** 8) / price
-  const priceInWie = ethers.BigNumber.from((priceInETH * 10 ** 18).toString())
+  const priceInETH = (1 * 10 ** 8) / price
+  const priceInWie = ethers.BigNumber.from((Math.ceil(priceInETH * 10 ** 18)).toString())
   const priceDecimals = 8
 
   let wnftContract

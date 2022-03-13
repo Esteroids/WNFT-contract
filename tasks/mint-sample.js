@@ -10,7 +10,7 @@ task("MintSample", "Prints an account's balance").setAction(async (taskArgs, hre
 
     const price = hre.ethers.BigNumber.from(140330173736)
     const priceInETH = (1 * 10 ** 8) / price
-    const priceInWie = hre.ethers.BigNumber.from((priceInETH * 10 ** 18).toString())
+    const priceInWie = hre.ethers.BigNumber.from((Math.ceil(priceInETH * 10 ** 18)).toString())
 
     const testTokenId = 1235
     await execute("WNFT", {from: deployer, log: true, value: priceInWie}, "mint", deployer, testTokenId)/*.then((tx) => tx.wait());;*/
