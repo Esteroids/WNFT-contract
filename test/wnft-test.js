@@ -25,11 +25,13 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
 
   let wnftContract
   let onchainTokenDataStringContract
+  let onchainTokenDataUintContract
 
   let mintingContract
   let WNFT
   let Minting
   let onchainTokenDataString
+  let onchainTokenDataUint
   let owner, addr1, addr2
   let MockV3Aggregator
   let mockPriceFeed
@@ -44,6 +46,7 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
     ensRegistryContract = await deployMockContract(owner, ENSRegistry.abi)
 
     onchainTokenDataString = await ethers.getContractFactory("onchainTokenDataString")
+    onchainTokenDataUint = await ethers.getContractFactory("onchainTokenDataUint")
 
     MockV3Aggregator = await ethers.getContractFactory("MockV3Aggregator")
     mockPriceFeed = await MockV3Aggregator.deploy(priceDecimals, price)
@@ -301,11 +304,13 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
       const testFieldName ="my field 1"
       const testFieldValue ="i am value"
 
-      const addCollectionOnchainMetadataFieldTx = await wnftContract.addCollectionOnchainMetadataField(testFieldName)
-      await addCollectionOnchainMetadataFieldTx.wait()
+      // const addCollectionOnchainMetadataFieldTx = await wnftContract.addCollectionOnchainMetadataField(testFieldName)
+      // await addCollectionOnchainMetadataFieldTx.wait()
 
       const setCollectionOnchainMetadataTx = await wnftContract.setCollectionOnchainMetadata(testFieldName, testFieldValue)
       await setCollectionOnchainMetadataTx.wait()
+
+      expect(await wnftContract.collectionOnchainMetadata(testFieldName)).to.be.equal(testFieldValue)
 
     })
   })
@@ -314,10 +319,12 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   describe("Token onchain metadata", async function () {
     beforeEach(async function () {
       onchainTokenDataStringContract = await onchainTokenDataString.deploy(wnftContract.address)
+      onchainTokenDataUintContract = await onchainTokenDataUint.deploy(wnftContract.address)
     })
 
     it("Add field", async function () {
       await wnftContract.addTokenOnchainMetadataField("0x661f2816", onchainTokenDataStringContract.address, "test")
+      await wnftContract.addTokenOnchainMetadataField("0x2421c19b", onchainTokenDataUintContract.address, "test uint")
     })
 
     it("Set field value", async function () {
@@ -326,11 +333,28 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
       const mintTx = await wnftContract.mint(testMintTo.address, testTokenId, { value: priceInWie })
       await mintTx.wait()
 
-      await wnftContract.addTokenOnchainMetadataField("0x661f2816", onchainTokenDataStringContract.address, "test")
-      const setTokenOnchainMetadata = await wnftContract
+      const testStringName = "test"
+      const testStringVal = "somevalue"
+      await wnftContract.addTokenOnchainMetadataField("0x661f2816", onchainTokenDataStringContract.address, testStringName)
+      const setTokenOnchainMetadataTx = await wnftContract
         .connect(testMintTo)
-        .setTokenOnchainMetadataString(testTokenId, "test", "somevalue")
-      await setTokenOnchainMetadata.wait()
+        .setTokenOnchainMetadataString(testTokenId, testStringName, testStringVal)
+      await setTokenOnchainMetadataTx.wait()
+
+
+      const testUintName = "test uint"
+      const testUintVal = 52
+      await wnftContract.addTokenOnchainMetadataField("0x2421c19b", onchainTokenDataUintContract.address, testUintName)
+      const setTokenOnchainMetadataTx2 = await wnftContract
+        .connect(testMintTo)
+        .setTokenOnchainMetadataUint(testTokenId, testUintName, testUintVal)
+      await setTokenOnchainMetadataTx2.wait()
+
+      expect(await wnftContract.tokenOnchainMetadataString(testTokenId, testStringName)).to.be.equal(testStringVal)
+
+      expect(await wnftContract.tokenOnchainMetadataUint(testTokenId, testUintName)).to.be.equal(testUintVal)
+      
+
     })
   })
 })
