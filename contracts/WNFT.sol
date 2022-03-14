@@ -277,8 +277,8 @@ contract WNFT is Ownable, ERC721URIStorage {
     * @dev Function to set the minting token price
     * @param @tokenPrice The USD value of the token price for minting
     */
-    function setTokenPrice(uint256 tokenPrice) external onlyOwner {
-        wnftPriceInUSDPOW8 = tokenPrice*(10**8);
+    function setTokenPrice(uint256 tokenPriceInTenthOfCent) external onlyOwner {
+        wnftPriceInUSDPOW8 = tokenPriceInTenthOfCent*(10**5);
     }
     
 
