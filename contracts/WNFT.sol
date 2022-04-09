@@ -34,7 +34,7 @@ contract WNFT is Ownable, ERC721URIStorage {
     uint[] private _keys;
     uint public amount;
 
-        // address(0) if this contract is still maintained, otherwise it means the owners recommend user to switch
+    // address(0) if this contract is still maintained, otherwise it means the owners recommend user to switch
     // to a new contract
     address private _contractSwitched;
 

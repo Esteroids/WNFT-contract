@@ -36,6 +36,9 @@ contract MintingLimitedAmount is Ownable, IMinting {
         return true;
     }
 
+    // afterMint is empty here since there are no cleanups effects
+    function afterMint(uint256 tokenId) external pure override {}
+
     /*
      * Increase the number allowed maximum amount of tokens. 
      * There are no "decereaseAmount" or setAmount functions to avoid conflicts (like, an owner decreasing the max
