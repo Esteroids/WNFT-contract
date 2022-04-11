@@ -11,5 +11,7 @@ contract Minting is IMinting {
     }
 
     // afterMint is left empty for this demo contract
-    function afterMint(uint256 tokenId) external pure override {}
+    function afterMint(address to, uint256 tokenId) external override returns (bool) {
+        return true;
+    }
 }

@@ -37,7 +37,9 @@ contract MintingLimitedAmount is Ownable, IMinting {
     }
 
     // afterMint is empty here since there are no cleanups effects
-    function afterMint(uint256 tokenId) external pure override {}
+    function afterMint(address to, uint256 tokenId) external override returns (bool) {
+        return true;
+    }
 
     /*
      * Increase the number allowed maximum amount of tokens. 

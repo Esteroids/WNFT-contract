@@ -19,5 +19,5 @@ interface IMinting{
      * @param  @to   The minting address.
      * @param  @tokenId The minting token id.
      */
-    function afterMint(address to, uint256 tokenId) external;
+    function afterMint(address to, uint256 tokenId) external returns (bool);
 }
