@@ -27,7 +27,7 @@ const networkConfig = {
   5: {
     name: "goerli",
     ensRegistry: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
-    ensPublicResolver: "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
+    ensPublicResolver: "0x4B1488B7a6B320d2D721406204aBc3eeAa9AD329",
   },
   80001: {
     name: "mumbai",

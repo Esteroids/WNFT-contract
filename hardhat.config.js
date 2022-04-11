@@ -8,6 +8,11 @@ require("@nomiclabs/hardhat-etherscan")
 require("hardhat-deploy")
 require("ethereum-waffle")
 require("hardhat-contract-sizer")
+require("hardhat-gas-reporter")
+
+require("./tasks/collection-metadata-fields")
+require("./tasks/mint-sample")
+require("./tasks/ens-contenthash")
 
 const { getRpcUrl, getAccounts } = require("./utils/networks")
 
@@ -32,6 +37,8 @@ module.exports = {
       url: getRpcUrl("goerli"),
       accounts: getAccounts("goerli"),
       saveDeployments: true,
+      gas: 2100000,
+      gasPrice: 8000000000,
     },
     kovan: {
       url: getRpcUrl("kovan"),
@@ -42,7 +49,7 @@ module.exports = {
   // hardhat-deploy
   namedAccounts: {
     deployer: {
-      default: 0, // here this will by default take the first account as deployer
+      default: 0, // here this will by default take the first account as deployer,
       1: 0, // similarly on mainnet it will take the first account as deployer. Note though that depending on how hardhat network are configured, the account 0 on one network can be different than on another
     },
   },
@@ -69,5 +76,11 @@ module.exports = {
   // hardhat-etherscan
   etherscan: {
     apiKey: ETHERSCAN_API_KEY,
+  },
+  gasReporter: {
+    currency: 'USD',
+    gasPrice: 100,
+    enabled:  true,
+    maxMethodDiff: 10,
   },
 }

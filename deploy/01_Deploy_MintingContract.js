@@ -12,5 +12,5 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   log("----------------------------------------------------")
 }
 
-module.exports.tags = ["all", "minting"]
+module.exports.tags = ["all", "minting", "wnftRequired"]
 module.exports.id = "basic-minting"
