@@ -125,6 +125,18 @@ interface IWNFT {
     function setENSResolver(Resolver ensResolver) external;
 
     /*
+    * @dev Function will return the ens registar contract
+    * @return {ENS} ens registar contract returned
+    */
+    function ENSRegistar() external view returns (ENS);
+
+    /*
+     * @dev Function to set the ens registar
+     * @param @ensRegistar ENS registar to set in the contract
+     */
+    function setENSRegistar(ENS ensRegistar) external;
+
+    /*
      * @dev function to trasnfer ens name ownership
      * @param @newOwner The new owner for the ens name
      */
@@ -140,8 +152,7 @@ interface IWNFT {
     * @dev Function will return the ens node id
     * @return {bytes32} ens node id returned
     */
-    function ENSNode() external view returns (bytes32);
-
+    function ENSNodeID() external view returns (bytes32);
 
     /*
     * @dev Function to set the minting token price
