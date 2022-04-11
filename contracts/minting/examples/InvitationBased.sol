@@ -16,9 +16,7 @@ contract InvitationBased is Ownable, IMinting {
     ERC20 internal invitationToken;
 
     /*
-     * A token can be minted if:
-     * 1. it's not minted yet, and
-     * 2. the minting address has an invitation token.
+     * Check if the address has invitation token to mint the token.
      */
     function canMint(address to, uint256) public view override returns (bool){
         require(invitationToken.balanceOf(to) > 0, "Invitation Token is needed for minting.");
