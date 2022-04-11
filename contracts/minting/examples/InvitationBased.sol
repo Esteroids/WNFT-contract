@@ -26,11 +26,13 @@ contract InvitationBased is Ownable, IMinting {
         return true;
     }
 
-    // afterMint is empty here since there are no cleanups effects
+    // afterMint burns an invitation token after minting
     function afterMint(address to, uint256 tokenId) external override returns (bool) {
 
         // burns the invitation token
         invitationToken.transfer(address(0), 1);
+
+        return true;
     }
 
     /*
