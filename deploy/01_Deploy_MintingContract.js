@@ -9,6 +9,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log: true,
   })
   log("Basic minting deployed")
+
   log("----------------------------------------------------")
 }
 
