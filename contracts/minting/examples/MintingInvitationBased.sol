@@ -31,6 +31,7 @@ contract MintingInvitationBased is Ownable, IMinting {
     function afterMint(address to, uint256 ) external override returns (bool) {
 
          require(_invitationToken.balanceOf(to) > 0, "Missing token");
+         
         // burns the invitation token
         _invitationToken.burn(to, 1);
         return true;

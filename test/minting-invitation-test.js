@@ -63,6 +63,9 @@ skipIf.if(!developmentChains.includes(network.name)).describe("MintingInvitation
         mintingContract = await mintingFactory.deploy(inviteTokenContract.address)
         await mintingContract.deployed()
 
+        // set the minting contract to be burning contract in the invitation tokens
+        await inviteTokenContract.setBurningContract(mintingContract.address);
+
         wnftContract = await WNFT.deploy(
             WNFTName,
             WNFTSymbol,
