@@ -37,7 +37,7 @@ contract MintingLimitedAmount is Ownable, IMinting {
     }
 
     // afterMint is empty here since there are no cleanups effects
-    function afterMint(address to, uint256 tokenId) external override returns (bool) {
+    function afterMint(address , uint256 ) external override returns (bool) {
         return true;
     }
 
