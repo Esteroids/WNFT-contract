@@ -38,10 +38,10 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     log: true,
   })
   log("Deployed WNFT")
-  log("----------------------------------------------------")
-  log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-  log("Please run `npx hardhat console` to interact with the deployed smart contracts!")
-  log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+  // log("----------------------------------------------------")
+  // log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+  // log("Please run `npx hardhat console` to interact with the deployed smart contracts!")
+  // log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 }
 
 module.exports.tags = ["all", "wnft", "wnftRequired"]

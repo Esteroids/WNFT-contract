@@ -31,13 +31,13 @@ const networkConfig = {
   },
   80001: {
     name: "matic",
-    ethUsdPriceFeed: "0xF9680D99D6C9589e2a93a78A04A279e509205945",
+    ethUsdPriceFeed: "0xAB594600376Ec9fD91F8e885dADF0CE036862dE0",
     ensRegistry: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
     ensPublicResolver: "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
   },
   137: {
     name: "matic",
-    ethUsdPriceFeed: "0xF9680D99D6C9589e2a93a78A04A279e509205945",
+    ethUsdPriceFeed: "0xAB594600376Ec9fD91F8e885dADF0CE036862dE0",
     ensRegistry: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
     ensPublicResolver: "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
   },
