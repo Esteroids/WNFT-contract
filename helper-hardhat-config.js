@@ -30,12 +30,16 @@ const networkConfig = {
     ensPublicResolver: "0x4B1488B7a6B320d2D721406204aBc3eeAa9AD329",
   },
   80001: {
-    name: "mumbai",
-    ethUsdPriceFeed: "0x0715A7794a1dc8e42615F059dD6e406A6594651A",
+    name: "matic",
+    ethUsdPriceFeed: "0xF9680D99D6C9589e2a93a78A04A279e509205945",
+    ensRegistry: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+    ensPublicResolver: "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
   },
   137: {
-    name: "polygon",
+    name: "matic",
     ethUsdPriceFeed: "0xF9680D99D6C9589e2a93a78A04A279e509205945",
+    ensRegistry: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+    ensPublicResolver: "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41",
   },
 }
 

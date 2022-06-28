@@ -45,6 +45,13 @@ module.exports = {
       accounts: getAccounts("kovan"),
       saveDeployments: true,
     },
+    matic: {
+      url: getRpcUrl("matic"),
+      accounts: getAccounts("matic"),
+      saveDeployments: true,
+    }
+    
+    
   },
   // hardhat-deploy
   namedAccounts: {
@@ -63,7 +70,7 @@ module.exports = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 1,
+            runs: 500,
           },
         },
       },
@@ -79,8 +86,10 @@ module.exports = {
   },
   gasReporter: {
     currency: 'USD',
-    gasPrice: 100,
+    token: "MATIC",
     enabled:  true,
     maxMethodDiff: 10,
+    coinmarketcap: process.env.COINMARKETCAP_API_KEY || null,
+
   },
 }
