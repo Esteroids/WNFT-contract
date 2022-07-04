@@ -12,6 +12,7 @@ import "@ensdomains/resolver/contracts/Resolver.sol";
 import "./minting/IMinting.sol";
 import "./onchainData/IonchainTokensData.sol";
 
+
 /*
 * @title WNFT website Non-Fungible Token Standard basic implementation
 * @dev WNFT basic implementation
@@ -108,8 +109,11 @@ contract WNFT is Ownable, ERC721URIStorage {
         _;
     }
 
-    modifier enoughFunds(uint value) {
-        require( value - (wnftPriceInUSDPOW8 * 10**18/uint(_getLatestPrice())) < 10, "Wei dont match");
+    modifier enoughFunds(uint256 value) {
+        int256 oraclePrice = int256(_getLatestPrice());
+        int256 tolerance = ((1 * 10**18 * 10**8 / oraclePrice) / 1000);
+        int256 diff = (((int256(wnftPriceInUSDPOW8) * 10**18 ) /int256(oraclePrice)) - int256(value));
+        require( diff < tolerance, "Wei dont match got");
         _;
     }
 
@@ -146,6 +150,28 @@ contract WNFT is Ownable, ERC721URIStorage {
      */
     function setWnftUri(string calldata uri) external onlyOwner {
         _wnftUri = uri;
+    }
+
+    function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
+        if (_i == 0) {
+            return "0";
+        }
+        uint j = _i;
+        uint len;
+        while (j != 0) {
+            len++;
+            j /= 10;
+        }
+        bytes memory bstr = new bytes(len);
+        uint k = len;
+        while (_i != 0) {
+            k = k-1;
+            uint8 temp = (48 + uint8(_i - _i / 10 * 10));
+            bytes1 b1 = bytes1(temp);
+            bstr[k] = b1;
+            _i /= 10;
+        }
+        return string(bstr);
     }
 
      /*
@@ -451,7 +477,7 @@ contract WNFT is Ownable, ERC721URIStorage {
      * @dev Function to get token by incremental counter index
      * @return {int} latest ETH/USD price from oracle
      */
-    function _getLatestPrice() internal view returns (int) {
+    function _getLatestPrice() internal view returns (int256) {
         (
             ,
             int price,
@@ -461,6 +487,21 @@ contract WNFT is Ownable, ERC721URIStorage {
         // for ETH / USD price is scaled up by 10 ** 8
         return price;
     }
+
+    function getTokenPrice()
+    external
+    view
+    returns (
+      uint256 inWei,
+      uint256 inUSDPow8
+    
+    )
+  {
+    return ( 
+        ((wnftPriceInUSDPOW8 * 10**18 ) /uint256(_getLatestPrice())),
+        wnftPriceInUSDPOW8
+    );
+  }
 
 
     

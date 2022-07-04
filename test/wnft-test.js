@@ -17,9 +17,12 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   let ensRegistryContract
 
   const ensNodeId = "0x18b7e70c27aa3a4fd844e78c153b49a03233f5588351c1fc26cff3486469b379"
+  
 
-  const price = ethers.BigNumber.from(140330173736)
-  const priceInETH = (1 * 10 ** 8) / price
+  const price = ethers.BigNumber.from(47898921)
+  const priceInUsd = 1
+  const priceInUsdPow8 = priceInUsd * 10 ** 8
+  const priceInETH = ( priceInUsdPow8) / price
   const priceInWie = ethers.BigNumber.from((Math.ceil(priceInETH * 10 ** 18)).toString())
   const priceDecimals = 8
 
@@ -209,6 +212,15 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   })
 
   describe("Tokens", async function () {
+    it("Should be able to get token price", async function () {
+      const [inWei, inUSDPow8] = await wnftContract.getTokenPrice()
+
+      expect(Math.abs(inWei - priceInWie)<1000).to.true
+      expect(inUSDPow8.toString()).to.equal(priceInUsdPow8.toString())
+      
+    })
+
+
     it("Should be able to change tokenUri if owner", async function () {
       const testTokenId = ethers.BigNumber.from("42")
       const testMintTo = addr2
