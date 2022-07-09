@@ -9,6 +9,9 @@ const { developmentChains } = require("../helper-hardhat-config")
 const PublicResolver = require("../artifacts/@ensdomains/resolver/contracts/Resolver.sol/Resolver.json")
 const ENSRegistry = require("../artifacts/@ensdomains/ens/contracts/ENS.sol/ENS.json")
 
+
+const ERROR_NONE_OWNER = "Ownable: caller is not the owner"
+
 skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", function () {
   const WNFTName = "Citadel"
   const WNFTSymbol = "CIT"
@@ -20,7 +23,7 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   
 
   const price = ethers.BigNumber.from(47898921)
-  const priceInUsd = 1
+  const priceInUsd = 0.01
   const priceInUsdPow8 = priceInUsd * 10 ** 8
   const priceInETH = ( priceInUsdPow8) / price
   const priceInWie = ethers.BigNumber.from((Math.ceil(priceInETH * 10 ** 18)).toString())
@@ -100,6 +103,18 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
       expect(await wnftContract.ownerOf(testTokenId)).to.be.equal(testMintTo)
     })
 
+    it("Not allowing minting with low price", async function () {
+      const testTokenId = ethers.BigNumber.from("42")
+      const testMintTo = addr2.address
+
+      const lowPrice = 100
+
+      await expect(
+        wnftContract.mint(testMintTo, testTokenId, { value: lowPrice }),
+      ).to.be.revertedWith("Wei dont match")
+
+    })
+
     it("Minting with Limited Amount contract example", async function () {
       const MintingLimitedAmount = await ethers.getContractFactory("MintingLimitedAmount")
       const mintingLimitedAmountContract = await MintingLimitedAmount.deploy()
@@ -154,7 +169,7 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
 
       await expect(
         wnftContract.connect(testNotOwnerAddress).setMintingContract(newMintingContract.address),
-      ).to.be.revertedWith("Ownable: caller is not the owner")
+      ).to.be.revertedWith(ERROR_NONE_OWNER)
 
       expect(await wnftContract.mintingContract()).to.be.equal(currentMintingContractAddress)
     })
@@ -204,7 +219,7 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
       await TestUtils.ContractsNotSame(currentContractSwitchAddress, testNewContractAddress)
 
       await expect(wnftContract.connect(addr1).setContractSwitched(testNewContractAddress)).to.be.revertedWith(
-        "Ownable: caller is not the owner",
+        ERROR_NONE_OWNER,
       )
 
       expect(await wnftContract.contractSwitched()).to.equal(currentContractSwitchAddress)
@@ -214,7 +229,6 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   describe("Tokens", async function () {
     it("Should be able to get token price", async function () {
       const [inWei, inUSDPow8] = await wnftContract.getTokenPrice()
-
       expect(Math.abs(inWei - priceInWie)<1000).to.true
       expect(inUSDPow8.toString()).to.equal(priceInUsdPow8.toString())
       
@@ -366,6 +380,38 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
 
       expect(await wnftContract.tokenOnchainMetadataUint(testTokenId, testUintName)).to.be.equal(testUintVal)
       
+
+    })
+  })
+
+  describe("Withdraw", async function () {
+
+   
+
+    it("Not allowing withdraw for none owner", async function () {
+      const testMintTo = addr2.address
+
+      await expect(
+        wnftContract.connect(addr2).withdraw(testMintTo, ethers.BigNumber.from(1000)),
+      ).to.be.revertedWith(ERROR_NONE_OWNER)
+
+    })
+
+    it("Allow withdraw", async function () {
+      const testTokenId1 = ethers.BigNumber.from("42")
+      const testTokenId2 = ethers.BigNumber.from("43")
+      const testTokenId3 = ethers.BigNumber.from("44")
+      const testMintTo = addr2.address
+
+      const mintTx1 = await wnftContract.mint(testMintTo, testTokenId1, { value: priceInWie })
+      await mintTx1.wait()
+      const mintTx2 = await wnftContract.mint(testMintTo, testTokenId2, { value: priceInWie })
+      await mintTx2.wait()
+      const mintTx3 = await wnftContract.mint(testMintTo, testTokenId3, { value: priceInWie })
+      await mintTx3.wait()
+
+      const withdrawTx = await wnftContract.withdraw( testMintTo, priceInWie )
+      await withdrawTx.wait()
 
     })
   })

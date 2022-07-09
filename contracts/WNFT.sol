@@ -32,7 +32,7 @@ contract WNFT is Ownable, ERC721URIStorage {
 
     AggregatorV3Interface private _priceFeed;
 
-    uint256 public wnftPriceInUSDPOW8 = 1*(10**8);
+    uint256 public wnftPriceInUSDPOW8 = 1 *(10**8) / 100;
 
     // for iterating all tokens
     uint[] private _keys;
@@ -113,7 +113,7 @@ contract WNFT is Ownable, ERC721URIStorage {
         int256 oraclePrice = int256(_getLatestPrice());
         int256 tolerance = ((1 * 10**18 * 10**8 / oraclePrice) / 1000);
         int256 diff = (((int256(wnftPriceInUSDPOW8) * 10**18 ) /int256(oraclePrice)) - int256(value));
-        require( diff < tolerance, "Wei dont match got");
+        require( diff < tolerance, "Wei dont match");
         _;
     }
 
@@ -152,27 +152,6 @@ contract WNFT is Ownable, ERC721URIStorage {
         _wnftUri = uri;
     }
 
-    function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
-        if (_i == 0) {
-            return "0";
-        }
-        uint j = _i;
-        uint len;
-        while (j != 0) {
-            len++;
-            j /= 10;
-        }
-        bytes memory bstr = new bytes(len);
-        uint k = len;
-        while (_i != 0) {
-            k = k-1;
-            uint8 temp = (48 + uint8(_i - _i / 10 * 10));
-            bytes1 b1 = bytes1(temp);
-            bstr[k] = b1;
-            _i /= 10;
-        }
-        return string(bstr);
-    }
 
      /*
      * @dev Function to add more onchain metadata fields for the tokens
@@ -306,8 +285,9 @@ contract WNFT is Ownable, ERC721URIStorage {
     function setTokenPrice(uint256 tokenPriceInTenthOfCent) external onlyOwner {
         wnftPriceInUSDPOW8 = tokenPriceInTenthOfCent*(10**5);
     }
-    
 
+
+    
     /*
     * @dev Function to mint tokens
     * @param @to The address that will receive the minted tokens.
@@ -315,6 +295,11 @@ contract WNFT is Ownable, ERC721URIStorage {
     */
     function mint(address to, uint256 tokenId) external payable enoughFunds(msg.value) canMintMod(to, tokenId)  {
         _doMint(to, tokenId);
+    }
+
+    
+    function withdraw(address payable recipient, uint256 transferAmount) external onlyOwner {
+        recipient.transfer(transferAmount);
     }
 
     /*
