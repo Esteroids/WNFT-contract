@@ -20,8 +20,8 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const minting = await deployments.get("Minting")
   const mintingAddress = minting.address
 
-  const ensRegistryAddress = networkConfig[chainId].ensRegistry
-  const ensPublicResolverAddress = networkConfig[chainId].ensPublicResolver
+  const ensRegistryAddress = networkConfig[chainId].ensRegistry || "0x00"
+  const ensPublicResolverAddress = networkConfig[chainId].ensPublicResolver || "0x00"
 
   log("----------------------------------------------------")
   await deploy("WNFT", {

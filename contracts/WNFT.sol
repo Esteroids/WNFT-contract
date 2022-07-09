@@ -353,7 +353,12 @@ contract WNFT is Ownable, ERC721URIStorage {
 
 
     function ensContenthash() public view returns (bytes memory){
-        return _ensResolver.contenthash(_ensNodeID);
+        if (address(_ensResolver) != address(0)){
+            return _ensResolver.contenthash(_ensNodeID);
+        }else{
+            return "";
+        }
+        
     }
    
    
