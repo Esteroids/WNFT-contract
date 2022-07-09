@@ -115,32 +115,6 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
 
     })
 
-    it("Minting with Limited Amount contract example", async function () {
-      const MintingLimitedAmount = await ethers.getContractFactory("MintingLimitedAmount")
-      const mintingLimitedAmountContract = await MintingLimitedAmount.deploy()
-
-      // set WNFT and max amount
-      const setWNFT = await mintingLimitedAmountContract.setWNFT(wnftContract.address)
-      setWNFT.wait()
-
-      const setAmountMax = await mintingLimitedAmountContract.increaseMaxAmount(10)
-      setAmountMax.wait()
-
-      // set mining contract in WNFT
-      await wnftContract.setMintingContract(mintingLimitedAmountContract.address)
-
-      // test minting
-      const testTokenId = ethers.BigNumber.from("42")
-      const testMintTo = addr2.address
-      const testTokenURI = "test://test.ckkjkj"
-
-      await wnftContract.mintWithTokenURI(testMintTo, testTokenId, testTokenURI, { value: priceInWie })
-
-      // test results
-      expect(await mintingLimitedAmountContract.maxAmount()).to.be.equal(10)
-      expect(await wnftContract.amount()).to.be.equal(1)
-    })
-
     it("Changing minting contract", async function () {
       const newMintingContract = await Minting.deploy()
       await newMintingContract.deployed()
@@ -412,6 +386,82 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
 
       const withdrawTx = await wnftContract.withdraw( testMintTo, priceInWie )
       await withdrawTx.wait()
+
+    })
+  })
+
+  describe("Custom minting", async function () {
+    it("Minting with Limited Amount contract example", async function () {
+      const MintingLimitedAmount = await ethers.getContractFactory("MintingLimitedAmount")
+      const mintingLimitedAmountContract = await MintingLimitedAmount.deploy()
+
+      // set WNFT and max amount
+      const setWNFT = await mintingLimitedAmountContract.setWNFT(wnftContract.address)
+      setWNFT.wait()
+
+      const setAmountMax = await mintingLimitedAmountContract.increaseMaxAmount(10)
+      setAmountMax.wait()
+
+      // set mining contract in WNFT
+      const setMintingContractTx = await wnftContract.setMintingContract(mintingLimitedAmountContract.address)
+      setMintingContractTx.wait()
+
+      // test minting
+      const testTokenId = ethers.BigNumber.from("42")
+      const testMintTo = addr2.address
+      const testTokenURI = "test://test.ckkjkj"
+
+      const mintWithTokenURITx = await wnftContract.mintWithTokenURI(testMintTo, testTokenId, testTokenURI, { value: priceInWie })
+      mintWithTokenURITx.wait()
+
+      // test results
+      expect(await mintingLimitedAmountContract.maxAmount()).to.be.equal(10)
+      expect(await wnftContract.amount()).to.be.equal(1)
+    })
+
+    it("Minting with Limited Amount contract enforced", async function () {
+      const MintingLimitedAmount = await ethers.getContractFactory("MintingLimitedAmount")
+      const mintingLimitedAmountContract = await MintingLimitedAmount.deploy()
+
+      // set WNFT and max amount
+      const setWNFT = await mintingLimitedAmountContract.setWNFT(wnftContract.address)
+      setWNFT.wait()
+
+      const setAmountMaxTx = await mintingLimitedAmountContract.increaseMaxAmount(2)
+      setAmountMaxTx.wait()
+
+      expect(await mintingLimitedAmountContract.maxAmount()).to.be.equal(2)
+
+      // set mining contract in WNFT
+      const setMintingContractTx = await wnftContract.setMintingContract(mintingLimitedAmountContract.address)
+      setMintingContractTx.wait()
+
+      // test minting
+      const testTokenId1 = ethers.BigNumber.from("42")
+      const testMintTo = addr2.address
+      const testTokenURI = "test://test.ckkjkj"
+
+      const mintWithTokenURITx1 = await wnftContract.mintWithTokenURI(testMintTo, testTokenId1, testTokenURI, { value: priceInWie })
+      mintWithTokenURITx1.wait()
+
+      const testTokenId2 = ethers.BigNumber.from("43")
+      const mintWithTokenURITx2 = await wnftContract.mintWithTokenURI(testMintTo, testTokenId2, testTokenURI, { value: priceInWie })
+      mintWithTokenURITx2.wait()
+
+      // test results
+      expect(await wnftContract.amount()).to.be.equal(2)
+
+      const testTokenId3 = ethers.BigNumber.from("44")
+
+      await expect(
+        wnftContract.mintWithTokenURI(testMintTo, testTokenId3, testTokenURI, { value: priceInWie })
+      ).to.be.revertedWith("Minting: reached maximum amount.")
+
+
+      expect(await wnftContract.amount()).to.be.equal(2)
+
+      
+
 
     })
   })
