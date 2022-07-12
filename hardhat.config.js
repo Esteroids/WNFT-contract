@@ -16,7 +16,8 @@ require("./tasks/ens-contenthash")
 
 const { getRpcUrl, getAccounts } = require("./utils/networks")
 
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || ""
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_SITE_API_KEY || ""
+const POLYSCAN_API_KEY = process.env.POLYSCAN_API_KEY || ""
 
 module.exports = {
   defaultNetwork: "hardhat",
@@ -49,6 +50,12 @@ module.exports = {
       url: getRpcUrl("matic"),
       accounts: getAccounts("matic"),
       saveDeployments: true,
+      verify: {
+        etherscan: {
+          apiUrl:'https://api.polygonscan.com',
+          apiKey: POLYSCAN_API_KEY,
+        }
+      }
     }
     
     
@@ -81,8 +88,10 @@ module.exports = {
   cache: "./cache",
   contractSizer: {},
   // hardhat-etherscan
-  etherscan: {
-    apiKey: ETHERSCAN_API_KEY,
+  verify: {
+    etherscan: {
+      apiKey: ETHERSCAN_API_KEY,
+    },
   },
   gasReporter: {
     currency: 'USD',
