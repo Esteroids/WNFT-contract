@@ -41,7 +41,7 @@ Find more information about WNFT in this [article](https://medium.com/p/7ec00099
 ## Setting Environment Variables
 You can set the environment variables in the`.env` file if you're unfamiliar with how environmentvariables work. Check out our [.env example](https://github.com/Esteroids/WNFT-contract/blob/main/.env.example). If you wish to use this method to set these variables, update the values in the .env.example file, and then rename it to '.env'
 
-![WARNING](https://via.placeholder.com/15/f03c15/000000?text=+) **WARNING** ![WARNING](https://via.placeholder.com/15/f03c15/000000?text=+)
+ **WARNING** 
 
 Do not commit and push any changes to .env files that may contain sensitive information, such as a private key! If this information reaches a public GitHub repository, someone can use it to check if you have any Mainnet funds in that wallet address, and steal them.
 

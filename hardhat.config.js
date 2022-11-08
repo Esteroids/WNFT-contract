@@ -18,7 +18,8 @@ require("./tasks/minting-invitation-assign-token")
 
 const { getRpcUrl, getAccounts } = require("./utils/networks")
 
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || ""
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_SITE_API_KEY || ""
+const POLYSCAN_API_KEY = process.env.POLYSCAN_API_KEY || ""
 
 module.exports = {
   defaultNetwork: "hardhat",
@@ -47,6 +48,19 @@ module.exports = {
       accounts: getAccounts("kovan"),
       saveDeployments: true,
     },
+    matic: {
+      url: getRpcUrl("matic"),
+      accounts: getAccounts("matic"),
+      saveDeployments: true,
+      verify: {
+        etherscan: {
+          apiUrl:'https://api.polygonscan.com',
+          apiKey: POLYSCAN_API_KEY,
+        }
+      }
+    }
+    
+    
   },
   // hardhat-deploy
   namedAccounts: {
@@ -65,7 +79,7 @@ module.exports = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 1,
+            runs: 500,
           },
         },
       },
@@ -76,13 +90,19 @@ module.exports = {
   cache: "./cache",
   contractSizer: {},
   // hardhat-etherscan
-  etherscan: {
-    apiKey: ETHERSCAN_API_KEY,
+  verify: {
+    etherscan: {
+      apiKey: ETHERSCAN_API_KEY,
+    },
   },
   gasReporter: {
     currency: 'USD',
+    token: "MATIC",
+    enabled:  true,
     gasPrice: 100,
     enabled:  false,
     maxMethodDiff: 10,
+    coinmarketcap: process.env.COINMARKETCAP_API_KEY || null,
+
   },
 }

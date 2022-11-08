@@ -12,6 +12,7 @@ import "@ensdomains/resolver/contracts/Resolver.sol";
 import "./minting/IMinting.sol";
 import "./onchainData/IonchainTokensData.sol";
 
+
 /*
 * @title WNFT website Non-Fungible Token Standard basic implementation
 * @dev WNFT basic implementation
@@ -31,7 +32,7 @@ contract WNFT is Ownable, ERC721URIStorage {
 
     AggregatorV3Interface private _priceFeed;
 
-    uint256 public wnftPriceInUSDPOW8 = 1*(10**8);
+    uint256 public wnftPriceInUSDPOW8 = 1 *(10**8);
 
     // for iterating all tokens
     uint[] private _keys;
@@ -108,8 +109,11 @@ contract WNFT is Ownable, ERC721URIStorage {
         _;
     }
 
-    modifier enoughFunds(uint value) {
-        require( value - (wnftPriceInUSDPOW8 * 10**18/uint(_getLatestPrice())) < 10, "Wei dont match");
+    modifier enoughFunds(uint256 value) {
+        int256 oraclePrice = int256(_getLatestPrice());
+        int256 tolerance = ((1 * 10**18 * 10**8 / oraclePrice) / 1000);
+        int256 diff = (((int256(wnftPriceInUSDPOW8) * 10**18 ) /int256(oraclePrice)) - int256(value));
+        require( diff < tolerance, "Wei dont match");
         _;
     }
 
@@ -147,6 +151,7 @@ contract WNFT is Ownable, ERC721URIStorage {
     function setWnftUri(string calldata uri) external onlyOwner {
         _wnftUri = uri;
     }
+
 
      /*
      * @dev Function to add more onchain metadata fields for the tokens
@@ -280,8 +285,9 @@ contract WNFT is Ownable, ERC721URIStorage {
     function setTokenPrice(uint256 tokenPriceInTenthOfCent) external onlyOwner {
         wnftPriceInUSDPOW8 = tokenPriceInTenthOfCent*(10**5);
     }
-    
 
+
+    
     /*
     * @dev Function to mint tokens
     * @param @to The address that will receive the minted tokens.
@@ -289,6 +295,11 @@ contract WNFT is Ownable, ERC721URIStorage {
     */
     function mint(address to, uint256 tokenId) external payable enoughFunds(msg.value) canMintMod(to, tokenId)  {
         _doMint(to, tokenId);
+    }
+
+    
+    function withdraw(address payable recipient, uint256 transferAmount) external onlyOwner {
+        recipient.transfer(transferAmount);
     }
 
     /*
@@ -342,7 +353,12 @@ contract WNFT is Ownable, ERC721URIStorage {
 
 
     function ensContenthash() public view returns (bytes memory){
-        return _ensResolver.contenthash(_ensNodeID);
+        if (address(_ensResolver) != address(0)){
+            return _ensResolver.contenthash(_ensNodeID);
+        }else{
+            return "";
+        }
+        
     }
    
    
@@ -452,7 +468,7 @@ contract WNFT is Ownable, ERC721URIStorage {
      * @dev Function to get token by incremental counter index
      * @return {int} latest ETH/USD price from oracle
      */
-    function _getLatestPrice() internal view returns (int) {
+    function _getLatestPrice() internal view returns (int256) {
         (
             ,
             int price,
@@ -462,6 +478,21 @@ contract WNFT is Ownable, ERC721URIStorage {
         // for ETH / USD price is scaled up by 10 ** 8
         return price;
     }
+
+    function getTokenPrice()
+    external
+    view
+    returns (
+      uint256 inWei,
+      uint256 inUSDPow8
+    
+    )
+  {
+    return ( 
+        ((wnftPriceInUSDPOW8 * 10**18 ) /uint256(_getLatestPrice())),
+        wnftPriceInUSDPOW8
+    );
+  }
 
 
     

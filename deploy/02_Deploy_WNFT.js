@@ -5,8 +5,8 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts()
   const chainId = await getChainId()
 
-  const WNFTName = "Citadel"
-  const WNFTSymbol = "CIT"
+  const WNFTName = "Citadef"
+  const WNFTSymbol = "CTDF"
   const ensNodeId = "0x18b7e70c27aa3a4fd844e78c153b49a03233f5588351c1fc26cff3486469b379"
 
   let ethUsdPriceFeedAddress
@@ -20,8 +20,8 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const minting = await deployments.get("Minting")
   const mintingAddress = minting.address
 
-  const ensRegistryAddress = networkConfig[chainId].ensRegistry
-  const ensPublicResolverAddress = networkConfig[chainId].ensPublicResolver
+  const ensRegistryAddress = networkConfig[chainId].ensRegistry || "0x00"
+  const ensPublicResolverAddress = networkConfig[chainId].ensPublicResolver || "0x00"
 
   log("----------------------------------------------------")
   await deploy("WNFT", {
@@ -38,10 +38,10 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     log: true,
   })
   log("Deployed WNFT")
-  log("----------------------------------------------------")
-  log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-  log("Please run `npx hardhat console` to interact with the deployed smart contracts!")
-  log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+  // log("----------------------------------------------------")
+  // log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+  // log("Please run `npx hardhat console` to interact with the deployed smart contracts!")
+  // log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 }
 
 module.exports.tags = ["all", "wnft", "wnftRequired"]
