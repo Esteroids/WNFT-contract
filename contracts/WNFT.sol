@@ -461,6 +461,7 @@ contract WNFT is Ownable, ERC721URIStorage {
         // add to tokens index
         _keys.push(tokenId);
         amount =  amount + 1;
+        _mintingContract.afterMint(to, tokenId);
     }
 
     /*

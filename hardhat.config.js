@@ -13,6 +13,8 @@ require("hardhat-gas-reporter")
 require("./tasks/collection-metadata-fields")
 require("./tasks/mint-sample")
 require("./tasks/ens-contenthash")
+require("./tasks/minting-invitation-assign-token")
+
 
 const { getRpcUrl, getAccounts } = require("./utils/networks")
 
@@ -23,10 +25,6 @@ module.exports = {
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {
-      // // If you want to do some forking, uncomment this
-      // forking: {
-      //   url: MAINNET_RPC_URL
-      // },
     },
     localhost: {},
     rinkeby: {
@@ -96,9 +94,9 @@ module.exports = {
   gasReporter: {
     currency: 'USD',
     token: "MATIC",
-    enabled:  true,
+    gasPrice: 100,
+    enabled:  process.env.COINMARKETCAP_API_KEY ? true : false,
     maxMethodDiff: 10,
     coinmarketcap: process.env.COINMARKETCAP_API_KEY || null,
-
   },
 }

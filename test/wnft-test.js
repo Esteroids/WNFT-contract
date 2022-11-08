@@ -23,7 +23,7 @@ skipIf.if(!developmentChains.includes(network.name)).describe("WNFT Contract", f
   
 
   const price = ethers.BigNumber.from(47898921)
-  const priceInUsd = 0.01
+  const priceInUsd = 1
   const priceInUsdPow8 = priceInUsd * 10 ** 8
   const priceInETH = ( priceInUsdPow8) / price
   const priceInWie = ethers.BigNumber.from((Math.ceil(priceInETH * 10 ** 18)).toString())
