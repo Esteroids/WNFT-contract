@@ -14,6 +14,7 @@
 * [Setting Environment Variables](#setting-environment-variables)
 * [Deploy](#deploy)
 * [Test](#test)
+* [Gas Cost](#gas-cost)
 * [Getting help](#getting-help)
 * [Getting involved](#getting-involved)
 * [License](#license)
@@ -47,10 +48,13 @@ Do not commit and push any changes to .env files that may contain sensitive info
 
 `.env` example:
 ```
+# only needed for the specific networks you intend to deploy on
 KOVAN_RPC_URL='https://kovan.infura.io/v3/1231234567890'
 GOERLI_RPC_URL='https://eth-goerli.alchemyapi.io/v2/your-api-key'
 RINKEBY_RPC_URL='https://eth-rinkeby.alchemyapi.io/v2/your-api-key'
 PRIVATE_KEY='abcdefg'
+# Optional wil show gas cost
+# COINMARKETCAP_API_KEY=[MY_GAS_COST]
 ```
 
 Then you can install all the dependencies
@@ -94,12 +98,17 @@ To run tests:
 npx hardhat test
 ```
 
+## Gas Cost
+To display gas cost you must add to the .env file your Coinmarketcap api key, can be found [here](https://coinmarketcap.com/api/pricing/).
+```
+COINMARKETCAP_API_KEY=[MY_GAS_COST]
+```
 
 ## Getting help
 If you have questions, concerns, bug reports, etc, please open an issue in this repository's Issue Tracker, send us an email to contact@esteroids.xyz or come to our [Discord](https://discord.gg/9c2EWzjFzY).
 
 ## Getting involved
-We encourage you to be involved. You can either contact us in email (contact@esteroids.xyz), [Twitter](https://twitter.com/e_steroids) or [Discord](https://discord.gg/9c2EWzjFzY), or simply from the project, add features, and do a PR for us to look at it.
+We encourage you to be involved. You can either contact us in email [contact@esteroids.xyz](mailto:contact@esteroids.xyz), [Twitter](https://twitter.com/e_steroids) or [Discord](https://discord.gg/9c2EWzjFzY), or simply from the project, add features, and do a PR for us to look at it.
 
 ----
 
