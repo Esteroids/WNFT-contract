@@ -13,6 +13,8 @@ require("hardhat-gas-reporter")
 require("./tasks/collection-metadata-fields")
 require("./tasks/mint-sample")
 require("./tasks/ens-contenthash")
+require("./tasks/minting-invitation-assign-token")
+
 
 const { getRpcUrl, getAccounts } = require("./utils/networks")
 
@@ -80,7 +82,7 @@ module.exports = {
   gasReporter: {
     currency: 'USD',
     gasPrice: 100,
-    enabled:  true,
+    enabled:  false,
     maxMethodDiff: 10,
   },
 }
