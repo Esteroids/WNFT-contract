@@ -9,6 +9,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts()
   const chainId = await getChainId()
 
+  console.log('chainId', chainId)
   const networkName = networkConfig[chainId].name
 
   if (networkConfig[chainId].ethUsdPriceFeed === undefined) {

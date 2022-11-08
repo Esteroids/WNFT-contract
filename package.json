@@ -25,7 +25,7 @@
   "homepage": "https://github.com/eyalron33/WNFT-hardhat#readme",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.3",
-    "@nomiclabs/hardhat-etherscan": "^3.0.0",
+    "@nomiclabs/hardhat-etherscan": "^3.1.0",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "chai": "^4.3.4",
     "eslint-config-prettier": "^8.3.0",
@@ -39,7 +39,7 @@
     "ethers": "^5.5.3",
     "hardhat": "^2.7.1",
     "hardhat-contract-sizer": "^2.3.1",
-    "hardhat-deploy": "^0.9.24",
+    "hardhat-deploy": "v0.11.10",
     "hardhat-deploy-ethers": "^0.3.0-beta.13",
     "hardhat-gas-reporter": "^1.0.8",
     "mocha-skip-if": "^0.0.3",
